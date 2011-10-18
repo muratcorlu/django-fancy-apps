@@ -14,6 +14,6 @@ fancy.mailform app gives you chance to add custom forms that mails content to a 
 
 ## Dependencies
 
-* django-mptt
-* django-tinymce
-* django-mailer (Optional)
+* [django-mptt](https://github.com/django-mptt/django-mptt)
+* [django-tinymce](https://github.com/aljosa/django-tinymce)
+* [django-mailer](https://github.com/jtauber/django-mailer) (Optional)
