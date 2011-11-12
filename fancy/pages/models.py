@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from tinymce.widgets import TinyMCE
 from tinymce import models as tinymce_models
 from mptt.models import MPTTModel
+from datetime import datetime
 
 class Page(MPTTModel):
     language = models.CharField(_('Language'), max_length=5, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
@@ -17,7 +18,9 @@ class Page(MPTTModel):
     content = tinymce_models.HTMLField(_('Page Content'),blank=True)
     show_in_menu = models.BooleanField(_('Show in Menu'), default=True)
     redirect_to = models.CharField(_('Redirect to'),help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
-
+    created_date = models.DateTimeField(_('Publish Date'), default=datetime.now())
+    last_modified = models.DateTimeField(_('Last Modified Date'), default=datetime.now())
+    
     STATUSES = (
         ('0', _('Draft')),
         ('1', _('Active')),
@@ -34,6 +37,7 @@ class Page(MPTTModel):
         return self.title
 
     def save(self, *args, **kwargs):
+        self.last_modified = datetime.now()
         if self.slug == '':
             self.slug = slugify(self.title)
 
@@ -41,6 +45,9 @@ class Page(MPTTModel):
     
     def get_active_child_menus(self):
         return self.children.filter(status=1,show_in_menu=True)
+    
+    def get_active_children(self):
+        return self.children.filter(status=1).order_by('order_number','title')
 
     @models.permalink
     def get_absolute_url(self):
