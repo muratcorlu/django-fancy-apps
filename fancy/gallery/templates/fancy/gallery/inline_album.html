@@ -1,0 +1,9 @@
+<ul class="media-grid">
+	{% for item in album.items.all %}
+	<li>
+		<a rel="album-{{ item.album.slug }}" href="{{ item.image.url_800x600 }}" title="{{ item.name }}">
+			<img class="thumbnail" src="{{ item.image.url_120x120 }}" alt="{{ item.name }}" />
+		</a>
+	</li>
+	{% endfor %}
+</ul>
