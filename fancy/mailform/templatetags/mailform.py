@@ -1,7 +1,6 @@
 from django import template
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-
 register = template.Library()
 
 """
@@ -13,10 +12,11 @@ Usage:
 
 {% show_mailform "contact_form.html" %} <!-- Shows contact_form.html form -->
 
+TODO: csrf protection should work
 """
 @register.simple_tag()
 def show_mailform(template="default.html"):
-    return render_to_string("fancy/mailform/%s" % template, {})
+    return render_to_string("fancy/mailform/%s" % template, {} )
 
 """
 Usage:
@@ -36,10 +36,10 @@ def render_mailform(value):
 
     for inline in content.findAll('mailform'):
         try:
-            template = inline["template"]
+            tpl = inline["template"]
         except:
-            template = "default.html"
+            tpl = "default.html"
         
-        inline.replaceWith(show_mailform(template))
+        inline.replaceWith(show_mailform(tpl))
 
     return mark_safe(content)

@@ -10,6 +10,7 @@ class PostAdmin(admin.ModelAdmin):
 
 	list_display = ('title','date','status')
 	list_filter = ['date']
+	list_editable = ('date',)
 	search_fields = ['title']
 	date_hierarchy = 'date'
 	inlines = [MetaInline]

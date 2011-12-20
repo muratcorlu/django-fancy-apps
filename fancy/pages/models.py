@@ -16,7 +16,7 @@ class Page(MPTTModel):
     template = models.CharField(_('Page template'), max_length=50, choices=pages_settings.PAGE_TEMPLATES, default='default')
     order_number = models.PositiveSmallIntegerField(_('Order Number'),help_text=_('Page Order Number'),default=0)
     content = tinymce_models.HTMLField(_('Page Content'),blank=True)
-    show_in_menu = models.BooleanField(_('Show in Menu'), default=True)
+    show_in_menu = models.BooleanField(_('Show in Menu'), default=False)
     redirect_to = models.CharField(_('Redirect to'),help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
     created_date = models.DateTimeField(_('Publish Date'), default=datetime.now())
     last_modified = models.DateTimeField(_('Last Modified Date'), default=datetime.now())
@@ -44,7 +44,7 @@ class Page(MPTTModel):
         super(Page, self).save(*args, **kwargs) # Call the "real" save() method.
     
     def get_active_child_menus(self):
-        return self.children.filter(status=1,show_in_menu=True)
+        return self.children.defer('content').filter(status=1,show_in_menu=True)
     
     def get_active_children(self):
         return self.children.filter(status=1).order_by('order_number','title')

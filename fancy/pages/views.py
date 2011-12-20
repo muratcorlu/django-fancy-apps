@@ -1,4 +1,5 @@
-from django.shortcuts import render_to_response, get_object_or_404, redirect, get_list_or_404
+from django.shortcuts import redirect, get_list_or_404
+from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.http import Http404, HttpResponse
 from django.views.generic import date_based, list_detail
@@ -37,5 +38,4 @@ def page_detail(request, slug):
 
     template_file = 'fancy/pages/%s.html' % page.template
 
-    return render_to_response(template_file, { 'page' : page },
-                context_instance=RequestContext(request))
+    return direct_to_template(request, template_file, { 'page' : page })

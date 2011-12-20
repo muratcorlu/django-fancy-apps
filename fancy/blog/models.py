@@ -8,16 +8,16 @@ from django.template.defaultfilters import slugify
 
 import uuid, os
 def get_upload_path(instance, filename):
-    ext = filename.split('.')[-1]
-    original_filename = filename.replace('.'+ext, '')
-    #filename = "%s.%s" % (uuid.uuid4(), ext)
-    # Path: images/album_slug/image_slug/images_slug.ext
-    image_slug = slugify(original_filename)
-    if instance.slug:
-        image_slug = instance.slug
-    
-    filename = "%s/%s/%s.%s" % ('posts',image_slug,image_slug,ext.lower())
-    return os.path.join('images/', filename)
+	ext = filename.split('.')[-1]
+	original_filename = filename.replace('.'+ext, '')
+	#filename = "%s.%s" % (uuid.uuid4(), ext)
+	# Path: images/album_slug/image_slug/images_slug.ext
+	image_slug = slugify(original_filename)
+	if instance.slug:
+		image_slug = instance.slug
+
+	filename = "%s/%s/%s.%s" % ('posts',image_slug,image_slug,ext.lower())
+	return os.path.join('images/', filename)
 
 class Post(models.Model):
 	title = models.CharField(_('Title'),max_length=200)
@@ -48,7 +48,13 @@ class Post(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		return ('post_detail', (), {'slug' : self.slug } )
-		
+	
+	def get_link(self):
+	    if self.redirect_to:
+	        return self.redirect_to
+
+	    return self.get_absolute_url()
+
 	def get_previous(self):
 		return self.get_previous_by_date(status__exact=1)
 	def get_next(self):
@@ -56,6 +62,9 @@ class Post(models.Model):
 		
 	def get_meta(self,key):
 	    return self.meta_data.objects.get(key=key)
+	
+	def get_content(self):
+		return self.content
 		
 class Category(models.Model):
 	name = models.CharField(_('Category Name'), max_length=50)
@@ -78,11 +87,10 @@ class Category(models.Model):
 		
 	def get_last_post(self):
 		return Post.objects.filter(categories=self)[0]
-		
 
 class PostMeta(models.Model):
     post = models.ForeignKey('Post', related_name="meta_data")
-    key = models.CharField(_('Key'), max_length=50)
+    key = models.CharField(_('Key'), max_length=50 )
     value = models.CharField(_('Value'), max_length=500, blank=True)
     
     class Meta:
