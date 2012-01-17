@@ -11,15 +11,8 @@ else:
     from django.core.mail import EmailMultiAlternatives
 
 def get_mail_content(request):
-    tpl = 'default'
-    fields = {}
-    
-    for key, value in request.POST.items():
-        if key[0] != '_': # ignore private fields
-            fields[key] = value
-    
-    if request.POST.get('_tpl'):
-        tpl = request.POST.get('_tpl')
+    tpl = request.POST.get('_tpl', 'default')
+    fields = dict((k, v) for k, v in request.POST.items() if k[0] != '_')
     
     return render_to_string("fancy/mailform/mail/%s.html" % tpl, {'fields':fields})
 
