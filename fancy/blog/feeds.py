@@ -1,5 +1,6 @@
 from django.contrib.syndication.views import Feed
 from models import Post
+import markdown
 import settings
 
 class LatestEntriesFeed(Feed):
@@ -14,4 +15,4 @@ class LatestEntriesFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.content
+        return markdown.markdown(item.content)
