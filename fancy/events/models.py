@@ -9,11 +9,6 @@ class Location(models.Model):
     created_date = models.DateTimeField(_('Created date'), auto_now=True)
     added_by = models.ForeignKey(User, verbose_name=_('Added by'),editable=False)
     
-    def save(self, *args, **kwargs):
-        self.added_by = self.request.user
-
-        super(Location, self).save(*args, **kwargs) # Call the "real" save() method.
-    
     class Meta:
         verbose_name = _('Location')
         verbose_name_plural = _('Locations')
@@ -37,11 +32,6 @@ class Event(models.Model):
     status = models.IntegerField(_('Status'),default=0,choices=EVENT_STATUSES)
     created_date = models.DateTimeField(_('Created date'), auto_now=True)
     owner = models.ForeignKey(User, verbose_name=_('Owner'),editable=False)
-    
-    def save(self, *args, **kwargs):
-        self.owner = self.request.user
-
-        super(Event, self).save(*args, **kwargs) # Call the "real" save() method.
     
     class Meta:
         verbose_name = _('Event')
