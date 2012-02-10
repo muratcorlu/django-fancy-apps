@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 15:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: models.py:6
+msgid "Location Name"
+msgstr "Mekan adı"
+
+#: models.py:7
+msgid "Location Latitude"
+msgstr "Mekan enlem"
+
+#: models.py:8
+msgid "Location Longitude"
+msgstr "Mekan boylam"
+
+#: models.py:10
+msgid "Added by"
+msgstr "Ekleyen"
+
+#: models.py:18
+msgid "Location"
+msgstr "Mekan"
+
+#: models.py:19
+msgid "Locations"
+msgstr "Mekanlar"
+
+#: models.py:26
+msgid "Unpublished"
+msgstr "Yayımlanmamış"
+
+#: models.py:27
+msgid "Public"
+msgstr "Herkese açık"
+
+#: models.py:28
+msgid "Private"
+msgstr "Özel"
+
+#: models.py:32
+msgid "Event Name"
+msgstr "Etkinlik adı"
+
+#: models.py:33
+msgid "Event Start Date"
+msgstr "Etkinlik başlangıç zamanı"
+
+#: models.py:34
+msgid "Event End Date"
+msgstr "Etkinlik bitiş zamanı"
+
+#: models.py:36
+msgid "Event Description"
+msgstr "Etkinlik açıklaması"
+
+#: models.py:39
+msgid "Owner"
+msgstr "Ekleyen"
+
+#: models.py:47
+msgid "Event"
+msgstr "Etkinlik"
+
+#: models.py:48
+msgid "Events"
+msgstr "Etkinlikler"
