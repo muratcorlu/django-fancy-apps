@@ -26,7 +26,7 @@ EVENT_STATUSES = (
 class Event(models.Model):
     name = models.CharField(_("Event Name"), max_length=250)
     date_start = models.DateTimeField(_("Event Start Date"))
-    date_end = models.DateTimeField(_("Event End Date"),blank=True)
+    date_end = models.DateTimeField(_("Event End Date"))
     location = models.ForeignKey(Location,verbose_name=_('Location'))
     description = models.TextField(_('Event Description'),blank=True)
     status = models.IntegerField(_('Status'),default=0,choices=EVENT_STATUSES)
