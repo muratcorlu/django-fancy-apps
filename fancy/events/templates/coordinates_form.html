@@ -1,0 +1,166 @@
+<input type="{{ input_type }}" id="{{ map_id }}" class="v{{ class_name }}{{ is_required }}" name="{{ field_name }}" size="{{ length }}" value="{{ data }}" {{ maxlength }}/>
+{% ifequal api "google" %}<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ api_key }}"></script>{% endifequal %}
+{% ifequal api "yahoo" %}<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.4&amp;appid={{ api_key }}"></script>{% endifequal %}
+{% ifequal api "yahooflash"  %}<script type="text/javascript" src="http://maps.yahooapis.com/v3.04/fl/javascript/apiloader.js?appid={{ api_key }}"></script>{% endifequal %}
+<script type="text/javascript" charset="utf-8">
+  //<![CDATA[
+  var djangoMap = {
+      api: "google",
+      latlon: [20.0, 0.0],
+      helptext: "Doubleclick on the map to change coordinates",
+      zoom: 17,
+      isnew: true,
+      init: function(api) {
+          djangoMap.api = api;
+          var inputs = document.getElementsByTagName('input');
+          for (i=0; i<inputs.length; i++) {
+              var inp = inputs[i];
+              if (inp.getAttribute('type') == 'text' && inp.className.match(/vCoordinatesFormField/)) {
+                  if (inp.value != "") {
+                    djangoMap.latlon = inp.value.split(",");
+                    djangoMap.isnew = false;
+                  }
+                  djangoMap.addMap(inp);
+              }
+          }
+      },
+      addMap: function(inp) {
+          self.inp = inp;
+          zoom = djangoMap.zoom;
+          switch (djangoMap.api) {
+              case "google":
+                  zoom = 12;
+                  if (djangoMap.isnew) {
+                    zoom = 1;
+                  }
+                  break;
+              case "yahoo":
+              case "yahooflash":
+                  if (!djangoMap.isnew) {
+                    zoom = 5;
+                  }
+                  break;
+              default:
+                  alert("No api given");
+          }
+          point = djangoMap.createPoint(djangoMap.latlon);
+          map = djangoMap.setupMap(inp, point, zoom);
+          marker = djangoMap.createMarker(map, point, zoom);
+          djangoMap.addHandler(inp, map, point, marker);
+      },
+      addHandler: function(inp, map, point, marker) {
+          switch (djangoMap.api) {
+              case "google":
+                  GEvent.addListener(map, "move", function() {
+                    point = map.getCenter();
+                    inp.value = point.lat()+","+point.lng();
+                    marker.setPoint(point);
+                  });
+                  GEvent.addListener(marker, "dragend", function() {
+                    point = marker.getPoint();
+                    inp.value = point.lat()+","+point.lng();
+                    map.panTo(point);
+                  });
+                  break;
+              case "yahoo":
+                  YEvent.Capture(map, EventsList.onPan, function() {
+                    inp.value = point.Lat+","+point.Lon;
+                    point = this.getCenterLatLon();
+                    marker.setYGeoPoint(point);
+                  });
+                  YEvent.Capture(marker, EventsList.MouseUp, function() {
+                    marker.openSmartWindow(djangoMap.helptext);
+                  });
+                  break;
+              case "yahooflash":
+                  map.addEventListener(Map.EVENT_ONCLICK, function(obj) {
+                    if (obj.action == "doubleClick") {
+                      map.removeAllMarkers();
+                      marker = new CustomPOIMarker("","",djangoMap.helptext,"0xFF0000","0xFFFFFF");
+                      point = new LatLon(obj.latlon.y, obj.latlon.x);
+                      inp.value = obj.latlon.y+","+obj.latlon.x;
+                      map.addMarkerByLatLon(marker, point);
+                    }
+                  });
+                  break;
+              default:
+                  alert("No api given.");
+          }
+      },
+      setupMap: function(inp, point, zoom) {
+          var mapdiv=document.createElement('div');
+          inp.parentNode.appendChild(mapdiv);
+          inp.style.display = "none";
+          mapdiv.id = "map_"+inp.id;
+          mapdiv.style.display = 'block';
+          mapdiv.style.cssFloat = 'left';
+          mapdiv.style.width = '480px';
+          mapdiv.style.height = '240px';
+          switch (djangoMap.api) {
+              case "google":
+                  map = new GMap2(mapdiv);
+                  map.addControl(new GSmallMapControl());
+                  map.addControl(new GMapTypeControl());
+                  map.addControl(new GOverviewMapControl(new GSize(100,100)));
+                  break;
+              case "yahoo":
+                  map = new YMap(mapdiv, YAHOO_MAP_REG);
+                  map.disableKeyControls();
+                  map.removeZoomScale();
+                  map.addPanControl();
+                  map.addZoomLong();
+                  map.addTypeControl();
+                  break;
+              case "yahooflash":
+                  map = new Map("map_"+inp.id, "{{ api_key }}", point, zoom);
+                  map.addTool(new PanTool(), true);
+                  map.addWidget(new SatelliteControlWidget());
+                  map.addWidget(new NavigatorWidget("close"));
+                  map.enableKeyboardShortcuts(false);
+                  break;
+              default:
+                  alert("No api given.");
+          }
+          return map;
+      },
+      createPoint: function(latlon) {
+          switch (djangoMap.api) {
+              case "google":
+                  point = new GLatLng(latlon[0],latlon[1]);
+                  break;
+              case "yahoo":
+                  point = new YGeoPoint(latlon[0],latlon[1]);
+                  break;
+              case "yahooflash":
+                  point = new LatLon(latlon[0],latlon[1])
+                  break;
+              default:
+                  alert("No api given.");
+          }
+          return point;
+      },
+      createMarker: function(map, point, zoom) {
+          switch (djangoMap.api) {
+              case "google":
+                  map.setCenter(point,zoom);
+                  marker = new GMarker(point, { title:djangoMap.helptext, draggable:true});
+                  map.addOverlay(marker);
+                  break;
+              case "yahoo":
+                  map.drawZoomAndCenter(point,zoom);
+                  marker = new YMarker(point);
+                  map.addOverlay(marker);
+                  break;
+              case "yahooflash":
+                  marker = new CustomPOIMarker("","",djangoMap.helptext,"0xFF0000","0xFFFFFF");
+                  map.addMarkerByLatLon(marker, point);
+                  break;
+              default:
+                  alert("No api given.");
+          }
+          return marker;
+      }
+  }
+  addEvent(window, 'load', function() { djangoMap.init('{{ api }}')});
+  //]]>
+</script>

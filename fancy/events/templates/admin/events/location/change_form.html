@@ -1,0 +1,53 @@
+{% extends "admin/change_form.html" %}
+
+{% block form_top %}
+  <p>Set location name and location</p>
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+  #map_canvas { height: 350px; }
+</style>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false">
+</script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+		$(function(){
+			$('div.form-row.lat, div.form-row.lon').hide();
+			$('<div class="form-row coordinate"><div id="map_canvas"></div></div>').appendTo("fieldset");
+			
+			var latlng = new google.maps.LatLng($('#id_lat').val(), $('#id_lon').val());
+		    var myOptions = {
+		      zoom: 8,
+		      center: latlng,
+		      mapTypeId: google.maps.MapTypeId.HYBRID,
+			  streetViewControl: false
+		    };
+		    var map = new google.maps.Map(document.getElementById("map_canvas"),
+		        myOptions);
+			var marker = new google.maps.Marker({
+				position: latlng, 
+				draggable: true,
+			    map: map
+			});
+			
+			var updateFields = function(coord) {
+				$('#id_lat').val(coord.lat());
+				$('#id_lon').val(coord.lng());
+			}
+			google.maps.event.addListener(marker, 'dragend', function(){
+				updateFields(marker.getPosition());
+				map.panTo(marker.getPosition());
+			});
+			
+			google.maps.event.addListener(map, 'click', function(event){
+				var pos = event.latLng;
+				marker.setPosition(pos);
+				updateFields(pos);
+				map.panTo(pos);
+			})
+		})
+    </script>
+{% endblock %}
