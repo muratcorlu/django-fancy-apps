@@ -6,7 +6,7 @@ class Location(models.Model):
     name = models.CharField(_("Location Name"), max_length=150)
     lat = models.FloatField(_("Location Latitude"))
     lon = models.FloatField(_("Location Longitude"))
-    created_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(_('Created date'), auto_now=True)
     added_by = models.ForeignKey(User, verbose_name=_('Added by'),editable=False)
     
     def save(self, *args, **kwargs):
@@ -30,12 +30,12 @@ EVENT_STATUSES = (
 
 class Event(models.Model):
     name = models.CharField(_("Event Name"), max_length=250)
-    date_start = models.DateTimeField(_("Event Start Date"),blank=True)
-    date_end = models.DateTimeField(_("Event End Date"))
-    location = models.ForeignKey(Location)
+    date_start = models.DateTimeField(_("Event Start Date"))
+    date_end = models.DateTimeField(_("Event End Date"),blank=True)
+    location = models.ForeignKey(Location,verbose_name=_('Location'))
     description = models.TextField(_('Event Description'),blank=True)
-    status = models.IntegerField(default=0,choices=EVENT_STATUSES)
-    created_date = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(_('Status'),default=0,choices=EVENT_STATUSES)
+    created_date = models.DateTimeField(_('Created date'), auto_now=True)
     owner = models.ForeignKey(User, verbose_name=_('Owner'),editable=False)
     
     def save(self, *args, **kwargs):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 15:53+0200\n"
+"POT-Creation-Date: 2012-02-10 16:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,11 +29,15 @@ msgstr "Mekan enlem"
 msgid "Location Longitude"
 msgstr "Mekan boylam"
 
+#: models.py:9 models.py:38
+msgid "Created date"
+msgstr "Eklenme tarihi"
+
 #: models.py:10
 msgid "Added by"
 msgstr "Ekleyen"
 
-#: models.py:18
+#: models.py:18 models.py:35
 msgid "Location"
 msgstr "Mekan"
 
@@ -68,6 +72,10 @@ msgstr "Etkinlik bitiş zamanı"
 #: models.py:36
 msgid "Event Description"
 msgstr "Etkinlik açıklaması"
+
+#: models.py:37
+msgid "Status"
+msgstr "Durum"
 
 #: models.py:39
 msgid "Owner"
