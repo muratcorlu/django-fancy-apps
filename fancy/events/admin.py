@@ -3,7 +3,7 @@ from django.contrib import admin
 
 class EventAdmin(admin.ModelAdmin):
     fields = ('name','date_start','date_end','location','description','status')
-    list_display = ('name', 'date_start')
+    list_display = ('name', 'owner', 'date_start')
     search_fields = ['name']
     date_hierarchy = 'date_start'
 
