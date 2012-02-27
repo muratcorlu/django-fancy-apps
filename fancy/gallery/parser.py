@@ -5,7 +5,7 @@ from django.http import Http404
 from django.utils.encoding import smart_unicode
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-from models import Album, AlbumItem
+from models import Album, Photo
 
 def inlines(value, return_list=False):
     try:

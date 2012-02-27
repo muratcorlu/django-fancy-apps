@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-27 02:28+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:16
+msgid "Advanced Options"
+msgstr "Gelişmiş Seçenekler"
+
+#: admin.py:30 models.py:45 models.py:53
+msgid "Image"
+msgstr "Resim"
+
+#: models.py:18
+msgid "Private"
+msgstr "Özel"
+
+#: models.py:19
+msgid "Public"
+msgstr "Umumi"
+
+#: models.py:44
+msgid "Item name"
+msgstr "İsim"
+
+#: models.py:46 models.py:90
+msgid "Slug"
+msgstr "URL karşılığı"
+
+#: models.py:47 models.py:89
+msgid "Description"
+msgstr "Açıklama"
+
+#: models.py:48
+msgid "Added date"
+msgstr "Eklenme tarihi"
+
+#: models.py:49
+msgid "Order number"
+msgstr "Sıra numarası"
+
+#: models.py:50
+msgid "Cover photo"
+msgstr "Kapak fotoğrafı"
+
+#: models.py:54
+msgid "Images"
+msgstr "Resimler"
+
+#: models.py:88
+msgid "Album Name"
+msgstr "Albüm Adı"
+
+#: models.py:91
+msgid "Creation Date"
+msgstr "Oluşturulma Tarihi"
+
+#: models.py:92
+msgid "Last Update Date"
+msgstr "Son Güncelleme Tarihi"
+
+#: models.py:93
+msgid "Created by"
+msgstr "Oluşturan"
+
+#: models.py:94
+msgid "Status"
+msgstr "Durum"
+
+#: models.py:106
+msgid "Album"
+msgstr "Albüm"
+
+#: models.py:107
+msgid "Albums"
+msgstr "Albümler"

@@ -28,7 +28,6 @@ class Post(models.Model):
 	date = models.DateTimeField(_('Publish Date'), default=datetime.now())
 	enable_comments = models.BooleanField(default=True)
 	categories = models.ManyToManyField('Category')
-	featured_image = ImageWithThumbsField(_('Featured Image'), upload_to=get_upload_path, sizes=((80,80),(640,200),), fixed=True, blank=True)
 	redirect_to = models.CharField(_('Redirect to'),help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
 	
 	PUB_STATUS = (
@@ -68,11 +67,12 @@ class Post(models.Model):
 	    return self.meta_data.objects.get(key=key)
 	
 	def metadata(self):
-	    dic = {}
-	    for mt in self.meta_data.all():
-	        dic[mt.key] = mt.value
+	    if not self._metadata:
+    	    self._metadata = {}
+    	    for mt in self.meta_data.all():
+    	        self._metadata[mt.key] = mt.value
 	    
-	    return dic
+	    return self._metadata
 
 	def get_content(self):
 		return self.content

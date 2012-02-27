@@ -1,3 +1,6 @@
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
-GALLERY_IMAGE_SIZES = getattr(settings, 'PAGE_TEMPLATES', ("80x80F", "100x100F", "800x600"))
+GALLERY_DIR = getattr(settings, 'GALLERY_DIR', "gallery")
+GALLERY_ORIGINAL_IMAGESIZE = getattr(settings, 'GALLERY_ORIGINAL_IMAGESIZE', "1600x1200")
+GALLERY_ENCRYPT_FILENAMES = getattr(settings, 'GALLERY_ENCRYPT_FILENAMES', False)
