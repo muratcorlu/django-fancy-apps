@@ -1,8 +1,12 @@
 from django.contrib import admin
-from models import Page
+from models import Page, PageMeta
 from mptt.admin import MPTTModelAdmin
 from django.utils.translation import ugettext_lazy as _
 import admin_forms as forms
+
+class MetaInline(admin.TabularInline):
+    model = PageMeta
+    extra = 0
 
 class PageAdmin(MPTTModelAdmin):
     form = forms.PageForm
@@ -21,7 +25,9 @@ class PageAdmin(MPTTModelAdmin):
     list_editable = ('order_number',)
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ['title']
-    ordering = ('title',)
+    ordering = ('order_number','title',)
+
+    inlines = [MetaInline]
 
 
 admin.site.register(Page,PageAdmin)
