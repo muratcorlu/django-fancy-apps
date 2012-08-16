@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 GALLERY_DIR = getattr(settings, 'GALLERY_DIR', "gallery")
 GALLERY_ORIGINAL_IMAGESIZE = getattr(settings, 'GALLERY_ORIGINAL_IMAGESIZE', "1600x1200")
