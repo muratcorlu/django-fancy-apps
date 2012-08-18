@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='django-fancy-apps',
-    version='0.1',
+    version='dev',
     description='Django Fancy Apps',
     author=u'Murat Çorlu',
     url='http://github.com/muratcorlu/django-fancy-apps',
