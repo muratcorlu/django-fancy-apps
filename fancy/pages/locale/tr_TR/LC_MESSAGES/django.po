@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-18 17:35+0300\n"
+"PO-Revision-Date: 2012-08-18 17:51+0200\n"
+"Last-Translator: Murat Çorlu <muratcorlu@gmail.com>\n"
+"Language-Team: Turkce <muratcorlu@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+
+#: admin.py:18
+msgid "Advanced Options"
+msgstr "Ayrıntılar"
+
+#: models.py:11
+msgid "Language"
+msgstr "Dil"
+
+#: models.py:12
+msgid "Title"
+msgstr "Başlık"
+
+#: models.py:13
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:14
+msgid "Page template"
+msgstr "Sayfa şablonu"
+
+#: models.py:15
+msgid "Order Number"
+msgstr "Sıra numarası"
+
+#: models.py:15
+msgid "Page Order Number"
+msgstr "Sayfa sıra numarası"
+
+#: models.py:16
+msgid "Page Content"
+msgstr "Sayfa içeriği"
+
+#: models.py:19
+msgid "Text"
+msgstr "Metin"
+
+#: models.py:20
+msgid "HTML"
+msgstr "HTML"
+
+#: models.py:21
+msgid "Markdown"
+msgstr "Markdown"
+
+#: models.py:24
+msgid "Content type"
+msgstr "İçerik tipi"
+
+#: models.py:25
+msgid "Show in Menu"
+msgstr "Menüde göster"
+
+#: models.py:26
+msgid "Redirect to"
+msgstr "Yönlendir"
+
+#: models.py:26
+msgid "Redirect this url to another url instead of showing"
+msgstr "Bu sayfayı göstermek yerine bu adrese yönlendir"
+
+#: models.py:27
+msgid "Publish Date"
+msgstr "Yayınlama tarihi"
+
+#: models.py:28
+msgid "Last Modified Date"
+msgstr "Son değiştirilme tarihi"
+
+#: models.py:31
+msgid "Draft"
+msgstr "Taslak"
+
+#: models.py:32
+msgid "Active"
+msgstr "Yayında"
+
+#: models.py:34
+msgid "Status"
+msgstr "Durum"
+
+#: models.py:35
+msgid "parent"
+msgstr "Ebeveyn"
+
+#: models.py:38
+msgid "Page"
+msgstr "Sayfa"
+
+#: models.py:39
+msgid "Pages"
+msgstr "Sayfalar"
+
+#: models.py:86
+msgid "Key"
+msgstr "Anahtar"
+
+#: models.py:87
+msgid "Value"
+msgstr "Değer"
+
+#: models.py:91 models.py:92
+msgid "Page Meta Data"
+msgstr "Sayfa ekstra bilgileri"
+
+#: settings.py:5
+msgid "Default"
+msgstr "Varsayılan"
