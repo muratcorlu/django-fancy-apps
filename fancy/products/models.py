@@ -69,6 +69,14 @@ class Product(models.Model):
         
         return self._metadata
 
+    def cover(self):
+        try:
+            cover_item = self.images.get(is_cover=True)
+        except:
+            cover_item = self.images.latest()
+        
+        return cover_item
+        
     @models.permalink
     def get_absolute_url(self):
         return ('payment_product_detail', (), {'slug' : str(self.slug) } )
