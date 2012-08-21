@@ -1,30 +1,31 @@
 # coding=utf-8
 from django.contrib import admin
-from models import Category, Product, ProductMeta
+from models import Category, Product
 #from fancy.gallery.models import Image
 from django.utils.translation import ugettext_lazy as _
+from fancy.utils.widgets import ImageSelectMultiple
+from django.db import models
+from fancy.utils.admin import MetaInline, BaseAdmin
+from fancy.gallery.admin import ImageInline
+from django.contrib.contenttypes import generic
 
-class MetaInline(admin.TabularInline):
-    model = ProductMeta
-    extra = 0
-
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(BaseAdmin):
     list_display  = ['name','price','status']
     search_fields = ['name']
     prepopulated_fields = {"slug": ("name",)}
 
     fieldsets = (
         (None, {
-            'fields': ('category','name','description','images'),
+            'fields': ('category','name','description',),
         }),
         (_('Extra informations'), {
-            'fields': ('price','status','slug','max_count')
+            'classes':('collapse',),
+            'fields': ('price','status','slug')
         })
     )
+    inlines = [ImageInline,MetaInline]
 
-    inlines = [MetaInline]
-
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 admin.site.register(Product, ProductAdmin)

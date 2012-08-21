@@ -4,13 +4,16 @@ from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 #from tinymce import models as tinymce_models
 from fancy.utils.thumbs import ImageWithThumbsField
+from fancy.utils.models import BaseModel
 from django.template.defaultfilters import slugify
 from mptt.models import MPTTModel
 from taggit.managers import TaggableManager
+from django.contrib.auth.models import User
 
-class Post(models.Model):
+class Post(models.Model,BaseModel):
     title = models.CharField(_('Title'),max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200)
+    author = models.ForeignKey(User, on_delete=models.SET())
     content = models.TextField(_('Post Content'),blank=True)
     date = models.DateTimeField(_('Publish Date'), default=datetime.now())
     enable_comments = models.BooleanField(default=True)
@@ -64,7 +67,7 @@ class Post(models.Model):
     def get_content(self):
         return self.content
         
-class Category(MPTTModel):
+class Category(MPTTModel,BaseModel):
     name = models.CharField(_('Category Name'), max_length=50)
     slug = models.SlugField(_('Slug'), max_length=200)
     description = models.TextField(_('Description'), blank=True)
@@ -90,16 +93,3 @@ class Category(MPTTModel):
     
     def last_post_date(self):
         return self.get_last_post().date
-
-class PostMeta(models.Model):
-    post = models.ForeignKey('Post', related_name="meta_data")
-    key = models.CharField(_('Key'), max_length=50 )
-    value = models.CharField(_('Value'), max_length=500, blank=True)
-    
-    class Meta:
-        ordering = ('post','key')
-        verbose_name = _('Post Meta Data')
-        verbose_name_plural = _('Post Meta Data')
-    
-    def __unicode__(self):
-        return self.key

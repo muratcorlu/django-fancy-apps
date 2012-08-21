@@ -4,8 +4,10 @@ from mptt.models import MPTTModel
 import settings
 from fancy.gallery.models import Image
 from datetime import datetime
+from fancy.utils.models import MetadataModel, BaseModel
+from django.contrib.contenttypes import generic
 
-class Category(MPTTModel):
+class Category(MPTTModel,BaseModel):
     name = models.CharField(_('Product Name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     description = models.TextField(_('Description'), blank=True)
@@ -15,19 +17,16 @@ class Category(MPTTModel):
         verbose_name = _('Product Category')
         verbose_name_plural = _('Product Categories')
         ordering = ('name',)
-    
+
     def __unicode__(self):
         return self.name
 
 
-class Product(models.Model):
+class Product(MetadataModel,BaseModel):
     name = models.CharField(_('Product Name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     price = models.DecimalField(_('Price'),max_digits=6,decimal_places=2,default=0)
     description = models.TextField(_('Description'))
-    created_date = models.DateTimeField(_('Publish Date'), default=datetime.now())
-    last_modified = models.DateTimeField(_('Last Modified Date'), default=datetime.now())
-    max_count = models.IntegerField(_('Max order count'), default=1)
     
     category = models.ForeignKey(Category, related_name="products")
 
@@ -36,8 +35,8 @@ class Product(models.Model):
         ('1', _('In stock')),
     )
     status = models.CharField(_('Status'), max_length=1, choices=STATUSES, default='1')
-
-    images = models.ManyToManyField(Image)
+    
+    images = generic.GenericRelation(Image)
     
     class Meta:
         verbose_name = _('Product')
@@ -60,15 +59,6 @@ class Product(models.Model):
     def get_price_as_cent(self):
         return int(self.price * 100)
 
-    _metadata = None
-    def metadata(self):
-        if not self._metadata:
-            self._metadata = {}
-            for mt in self.meta_data.all():
-                self._metadata[mt.key] = mt.value
-        
-        return self._metadata
-
     def cover(self):
         try:
             cover_item = self.images.get(is_cover=True)
@@ -76,20 +66,7 @@ class Product(models.Model):
             cover_item = self.images.latest()
         
         return cover_item
-        
+
     @models.permalink
     def get_absolute_url(self):
         return ('payment_product_detail', (), {'slug' : str(self.slug) } )
-
-class ProductMeta(models.Model):
-    product = models.ForeignKey(Product, related_name="meta_data")
-    key = models.CharField(_('Key'), max_length=50, choices=settings.PRODUCTS_META_CHOICES )
-    value = models.TextField(_('Value'), blank=True)
-    
-    class Meta:
-        ordering = ('product','key')
-        verbose_name = _('Product Meta Data')
-        verbose_name_plural = _('Product Meta Data')
-    
-    def __unicode__(self):
-        return self.key

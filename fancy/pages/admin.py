@@ -1,14 +1,11 @@
 from django.contrib import admin
-from models import Page, PageMeta
+from models import Page
 from mptt.admin import MPTTModelAdmin
 from django.utils.translation import ugettext_lazy as _
 import admin_forms as forms
+from fancy.utils.admin import BaseAdmin, MetaInline
 
-class MetaInline(admin.TabularInline):
-    model = PageMeta
-    extra = 0
-
-class PageAdmin(MPTTModelAdmin):
+class PageAdmin(MPTTModelAdmin,BaseAdmin):
     form = forms.PageForm
     
     fieldsets = (
