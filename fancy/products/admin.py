@@ -3,7 +3,6 @@ from django.contrib import admin
 from models import Category, Product
 #from fancy.gallery.models import Image
 from django.utils.translation import ugettext_lazy as _
-from fancy.utils.widgets import ImageSelectMultiple
 from django.db import models
 from fancy.utils.admin import MetaInline, BaseAdmin
 from fancy.gallery.admin import ImageInline
