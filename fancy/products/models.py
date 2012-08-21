@@ -8,14 +8,14 @@ from fancy.utils.models import MetadataModel, BaseModel
 from django.contrib.contenttypes import generic
 
 class Category(MPTTModel,BaseModel,ModelWithImage):
-    name = models.CharField(_('Product Name'), max_length=200)
+    name = models.CharField(_('Category name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     description = models.TextField(_('Description'), blank=True)
     parent = models.ForeignKey("self", related_name="children", null=True, blank=True)
 
     class Meta(BaseModel.Meta):
-        verbose_name = _('Product Category')
-        verbose_name_plural = _('Product Categories')
+        verbose_name = _('Product category')
+        verbose_name_plural = _('Product categories')
         ordering = ('name',)
 
     def __unicode__(self):
@@ -27,12 +27,12 @@ class Category(MPTTModel,BaseModel,ModelWithImage):
 
 
 class Product(MetadataModel,BaseModel,ModelWithImage):
-    name = models.CharField(_('Product Name'), max_length=200)
+    name = models.CharField(_('Product name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     price = models.DecimalField(_('Price'),max_digits=6,decimal_places=2,default=0)
     description = models.TextField(_('Description'))
     
-    category = models.ForeignKey(Category, related_name="products")
+    category = models.ForeignKey(Category, verbose_name=_('Product category'), related_name="products")
 
     STATUSES = (
         ('0', _('Out of stock')),

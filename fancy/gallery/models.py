@@ -58,7 +58,7 @@ class Image(BaseModel):
         return ('album_item_detail', (), {'album_slug':self.album.slug, 'album_item_slug' : self.slug } )
 
 # If sorl-thumbnail app is installed, bind image delete signal to thumbnail deletions
-if 'sorl' in settings.INSTALLED_APPS:
+if 'sorl.thumbnail' in settings.INSTALLED_APPS:
     from sorl.thumbnail import delete
     from django.db.models.signals import post_delete
     from django.dispatch import receiver
