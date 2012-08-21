@@ -23,7 +23,8 @@ class MetadataModel(models.Model):
     def metadata(self):
         if not self._metadata:
             self._metadata = {}
-            for mt in self.meta_data.all():
+            metadata_type = ContentType.objects.get_for_model(self)
+            for mt in Attribute.objects.filter(content_type__pk=metadata_type.id, object_id=self.id):
                 self._metadata[mt.key] = mt.value
         
         return self._metadata
@@ -36,7 +37,7 @@ class Attribute(BaseModel):
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
     key = models.CharField(_('Key'), max_length=50)
-    value = models.CharField(_('Value'), max_length=500, blank=True)
+    value = models.TextField(_('Value'), blank=True)
     
     class Meta:
         ordering = ('content_type','key')

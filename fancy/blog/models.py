@@ -28,7 +28,7 @@ class Post(models.Model,BaseModel):
     
     tags = TaggableManager(blank=True)
     
-    class Meta:
+    class Meta(BaseModel.Meta):
         ordering = ('-date',)
         get_latest_by = 'date'
         verbose_name = _('Post')
@@ -73,7 +73,7 @@ class Category(MPTTModel,BaseModel):
     description = models.TextField(_('Description'), blank=True)
     parent = models.ForeignKey("self", related_name="children", null=True, blank=True)
     
-    class Meta:
+    class Meta(BaseModel.Meta):
         ordering = ('name',)
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')

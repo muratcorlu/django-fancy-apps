@@ -20,7 +20,7 @@ class BaseAdmin(admin.ModelAdmin):
 
         for instance in instances:
             if isinstance(instance, BaseModel): #Check if it is the correct type of inline
-                if not change:
+                if not instance.created_by_id:
                     instance.created_by = request.user
                 
                 instance.last_updated_by = request.user            

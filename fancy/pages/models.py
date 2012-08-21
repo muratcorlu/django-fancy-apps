@@ -24,7 +24,7 @@ class Page(MPTTModel,BaseModel,MetadataModel):
     status = models.CharField(_('Status'), max_length=1, choices=STATUSES, default='1')
     parent = models.ForeignKey('self', verbose_name=_(u'parent'), blank=True, null=True, related_name='children')
     
-    class Meta:
+    class Meta(BaseModel.Meta):
         verbose_name = _('Page')
         verbose_name_plural = _('Pages')
 

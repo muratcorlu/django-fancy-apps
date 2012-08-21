@@ -27,6 +27,7 @@ class ProductAdmin(BaseAdmin):
 
 class CategoryAdmin(BaseAdmin):
     prepopulated_fields = {"slug": ("name",)}
+    inlines = [ImageInline]
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)

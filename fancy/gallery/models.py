@@ -30,7 +30,7 @@ class Image(BaseModel):
 
     tags = TaggableManager(blank=True)
         
-    class Meta:
+    class Meta(BaseModel.Meta):
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
 
@@ -68,12 +68,7 @@ if 'sorl' in settings.INSTALLED_APPS:
         # delete thumbnails
         delete(instance.image)
 
-class Album(BaseModel):
-    name = models.CharField(_('Album Name'), max_length=200)
-    description = models.TextField(_('Description'), blank=True)
-    slug = models.SlugField(_('Slug'), max_length=200, blank=True)
-    status = models.SmallIntegerField(_('Status'),choices=ALBUM_STATUSES)
-    
+class ModelWithImage(models.Model):
     images = generic.GenericRelation(Image)
 
     def cover(self):
@@ -85,6 +80,16 @@ class Album(BaseModel):
         return cover_item
 
     class Meta:
+        abstract = True
+
+
+class Album(BaseModel, ModelWithImage):
+    name = models.CharField(_('Album Name'), max_length=200)
+    description = models.TextField(_('Description'), blank=True)
+    slug = models.SlugField(_('Slug'), max_length=200, blank=True)
+    status = models.SmallIntegerField(_('Status'),choices=ALBUM_STATUSES)
+    
+    class Meta(BaseModel.Meta):
         verbose_name = _('Album')
         verbose_name_plural = _('Albums')
 
