@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-21 17:55+0300\n"
-"PO-Revision-Date: 2012-08-18 22:12+0200\n"
+"PO-Revision-Date: 2012-08-21 22:25+0200\n"
 "Last-Translator: Murat Çorlu <muratcorlu@gmail.com>\n"
 "Language-Team: Turkce <muratcorlu@gmail.com>\n"
 "Language: tr\n"
@@ -33,17 +33,14 @@ msgid "Description"
 msgstr "Açıklama"
 
 #: models.py:17 models.py:35
-#, fuzzy
 msgid "Product category"
 msgstr "Ürün kategorisi"
 
 #: models.py:18
-#, fuzzy
 msgid "Product categories"
 msgstr "Ürün kategorileri"
 
 #: models.py:30
-#, fuzzy
 msgid "Product name"
 msgstr "Ürün adı"
 
