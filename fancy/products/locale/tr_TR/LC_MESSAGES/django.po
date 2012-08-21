@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-18 22:10+0300\n"
+"PO-Revision-Date: 2012-08-18 22:12+0200\n"
+"Last-Translator: Murat Çorlu <muratcorlu@gmail.com>\n"
+"Language-Team: Turkce <muratcorlu@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+
+#: admin.py:20
+msgid "Extra informations"
+msgstr "Ek bilgiler"
+
+#: models.py:9 models.py:24
+msgid "Product Name"
+msgstr "Ürün adı"
+
+#: models.py:10 models.py:25
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:11 models.py:27
+msgid "Description"
+msgstr "Açıklama"
+
+#: models.py:15
+msgid "Product Category"
+msgstr "Ürün kategorisi"
+
+#: models.py:16
+msgid "Product Categories"
+msgstr "Ürün kategorileri"
+
+#: models.py:26
+msgid "Price"
+msgstr "Fiyat"
+
+#: models.py:28
+msgid "Publish Date"
+msgstr "Yayınlanma tarihi"
+
+#: models.py:29
+msgid "Last Modified Date"
+msgstr "Son düzenlenme tarihi"
+
+#: models.py:30
+msgid "Max order count"
+msgstr "En fazla sipariş adedi"
+
+#: models.py:35
+msgid "Out of stock"
+msgstr "Stokta yok"
+
+#: models.py:36
+msgid "In stock"
+msgstr "Stokta"
+
+#: models.py:38
+msgid "Status"
+msgstr "Durum"
+
+#: models.py:43
+msgid "Product"
+msgstr "Ürün"
+
+#: models.py:44
+msgid "Products"
+msgstr "Ürünler"
+
+#: models.py:86
+msgid "Key"
+msgstr "Anahtar"
+
+#: models.py:87
+msgid "Value"
+msgstr "Değer"
+
+#: models.py:91 models.py:92
+msgid "Product Meta Data"
+msgstr "Ürün ek bilgileri"
