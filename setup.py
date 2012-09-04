@@ -28,5 +28,10 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
+    install_requires=[
+        'django >= 1.4',
+        'django-taggit >= 0.8',
+        'django-mptt >= 0.5.2'
+    ],
 )
 
