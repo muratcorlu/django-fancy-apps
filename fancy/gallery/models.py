@@ -28,7 +28,7 @@ class Image(BaseModel):
     order_number = models.IntegerField(_('Order number'), default=0)
     is_cover = models.BooleanField(_('Cover photo'))
 
-    tags = TaggableManager(blank=True)
+    #tags = TaggableManager(blank=True)
         
     class Meta(BaseModel.Meta):
         verbose_name = _('Image')
