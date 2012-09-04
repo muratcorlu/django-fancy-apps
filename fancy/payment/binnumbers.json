@@ -1,0 +1,14 @@
+[{
+	"bin": 402275,
+	"bank": {
+		"name": "ASYA KATILIM BANKASI A.Ş.",
+		"url": "http://www.bankasya.com.tr",
+		"phone": ""
+	},
+	"brand": "MASTERCARD",	// VISA, MASTERCARD, MAESTRO, AMERICAN EXPRESS ...
+	"type": "CREDIT",  // CREDIT, DEBIT
+	"country": {
+		"name": "TURKEY",
+		"iso": "TR"
+	}
+}]
