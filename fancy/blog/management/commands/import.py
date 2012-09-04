@@ -1,7 +1,9 @@
 # coding: utf-8
 
 from django.core.management.base import BaseCommand, CommandError
-from fancy.blog.models import Post, Category, PostMeta
+from fancy.blog.models import Post, Category
+from fancy.utils.models import Attribute
+from django.contrib.auth.models import User
 import elementtree.ElementTree as ET
 from datetime import datetime
 
@@ -32,7 +34,7 @@ class Command(BaseCommand):
         
         <wp:category><wp:term_id>5</wp:term_id><wp:category_nicename>category-slug</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[Category Name]]></wp:cat_name><wp:category_description><![CDATA[Category Description]]></wp:category_description></wp:category>
         """
-        
+
         category_count = 0
         
         for category in xml.findall("channel/%scategory" % wpns):
@@ -50,8 +52,11 @@ class Command(BaseCommand):
                 cat_desc = ''
             
             cat_parent = category.find("%scategory_parent" % wpns).text
-            
-            newCat = Category(name=cat_name, slug=cat_slug, description=cat_desc)
+
+            # get or create imported user for category owner
+            import_user, created = User.objects.get_or_create(username='imported')
+        
+            newCat = Category(name=cat_name, slug=cat_slug, description=cat_desc, created_by=import_user, last_updated_by=import_user)
 
             if cat_parent:
                 try:
@@ -74,7 +79,7 @@ class Command(BaseCommand):
         		<title>Post title</title> 
         		# <link>http://example.com/2012/12/12/post-title/</link>
         		<pubDate>Mon, 12 Dec 2012 01:40:38 +0000</pubDate>
-        		# <dc:creator>admin</dc:creator>
+        		<dc:creator>admin</dc:creator>
         		# <guid isPermaLink="false">http://example.com/?p=5550</guid>
         		# <description></description>
         		<content:encoded><![CDATA[ Post Content ]]></content:encoded>
@@ -105,7 +110,11 @@ class Command(BaseCommand):
         
         for post in xml.findall("channel/item"):
             if post.find("%spost_type" % wpns).text == 'post':
-                newPost = Post()
+                author_name = post.find("{http://purl.org/dc/elements/1.1/}creator").text
+                author, created = User.objects.get_or_create(username=author_name)
+
+                newPost = Post(author=author, created_by=author, last_updated_by=author)
+
                 title = post.find("title").text
                 
                 newPost.title = 'Untitled post'
@@ -162,7 +171,7 @@ class Command(BaseCommand):
                     value = meta.find("%smeta_value" % wpns).text
                     if not value: value = ''
                     
-                    pm = PostMeta(post=newPost, key=key, value=value)
+                    pm = Attribute(content_object=newPost, key=key, value=value, created_by=newPost.author, last_updated_by=newPost.author)
                     pm.save()
                     
                 
