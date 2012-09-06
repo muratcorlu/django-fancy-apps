@@ -10,7 +10,7 @@ class PageAdmin(MPTTModelAdmin,BaseAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('title','content','parent'),
+            'fields': ['title','content','parent'],
         }),
         (_('Advanced Options'), {
             'classes':('collapse',),

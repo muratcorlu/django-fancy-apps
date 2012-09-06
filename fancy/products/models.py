@@ -23,7 +23,12 @@ class Category(MPTTModel,BaseModel,ModelWithImage):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('products_category_main', (), { 'category_slug': self.slug } )
+        if not getattr(self, '_slug', None):
+            url = self.slug
+            for ancestor in self.get_ancestors(True):
+                url = ancestor.slug + u'/' + url
+            self._slug = url    
+        return ('main_controller', (), {'slug' : str(self._slug) } )
 
 
 class Product(MetadataModel,BaseModel,ModelWithImage):
@@ -63,4 +68,5 @@ class Product(MetadataModel,BaseModel,ModelWithImage):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('products_detail', (), {'product_slug' : self.slug, 'category_slug': self.category.slug } )
+        url = self.category.get_absolute_url() + u'/' + self.slug
+        return ('main_controller', (), {'slug' : url } )

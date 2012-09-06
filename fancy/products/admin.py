@@ -17,7 +17,7 @@ class ProductAdmin(BaseAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('category','name','description',),
+            'fields': ['category','name','description',],
         }),
         (_('Extra informations'), {
             'classes':('collapse',),
