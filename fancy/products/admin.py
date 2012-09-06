@@ -10,9 +10,7 @@ from fancy.gallery.admin import ImageInline
 from django.contrib.contenttypes import generic
 from admin_forms import CategoryForm
 
-class ProductAdmin(MPTTModelAdmin,BaseAdmin):
-    form = CategoryForm
-
+class ProductAdmin(BaseAdmin):
     list_display  = ['name','price','status']
     search_fields = ['name']
     prepopulated_fields = {"slug": ("name",)}
@@ -28,7 +26,9 @@ class ProductAdmin(MPTTModelAdmin,BaseAdmin):
     )
     inlines = [ImageInline,MetaInline]
 
-class CategoryAdmin(BaseAdmin):
+class CategoryAdmin(MPTTModelAdmin,BaseAdmin):
+    form = CategoryForm
+
     prepopulated_fields = {"slug": ("name",)}
     inlines = [ImageInline]
 
