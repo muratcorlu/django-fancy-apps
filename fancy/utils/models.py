@@ -53,7 +53,7 @@ def version(sender, instance, **kwargs):
     if isinstance(instance, BaseModel):
         # if the instance has no id, it is created
         if instance.id:
-            old = instance._default_manager.get(id=instance.id)
+            old = instance.objects.get(id=instance.id)
             old.pk = None
             old.id = None
             old.related_id = instance.id
