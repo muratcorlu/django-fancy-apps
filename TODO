@@ -3,3 +3,4 @@
 * gallery: "image versions" options with manual cropping support
 * products: a setting for max number of images that can add to a product
 * gallery: show thumbnails in ImageInlineAdmin
+* utils: override builtin upper - lower template filters to fix Turkish case-switch problem

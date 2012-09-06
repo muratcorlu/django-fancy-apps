@@ -5,10 +5,20 @@ from django.http import Http404, HttpResponse
 from django.conf import settings
 import settings as appsettings
 
-if "mailer" in settings.INSTALLED_APPS:
-    from mailer import EmailMultiAlternatives
-else:
-    from django.core.mail import EmailMultiAlternatives
+#from fancy.utils.mail import send_html_mail
+from django.utils.html import strip_tags
+
+def send_mail(subject, from_email, recipients, message_html):
+    if "mailer" in settings.INSTALLED_APPS:
+        from mailer import send_html_mail
+        send_html_mail(subject=subject, message=strip_tags(message_html), message_html=message_html, from_email=from_email, recipient_list=recipients)
+    else:
+        from django.core.mail import EmailMultiAlternatives
+
+        msg = EmailMultiAlternatives(subject, "message_plaintext", from_email, recipients)
+        msg.attach_alternative(message_html, "text/html")
+        msg.content_subtype = "html"
+        msg.send()
 
 def get_mail_content(request):
     tpl = request.POST.get('_tpl', 'default')
@@ -24,9 +34,6 @@ def post_form(request):
     redirect_to = request.POST.get('_success_url')
     subject = request.POST.get('_subject', appsettings.FORM_SUBJECT)
     
-    msg = EmailMultiAlternatives(subject, "message_plaintext", from_email, recipients)
-    msg.attach_alternative(message_html, "text/html")
-    msg.content_subtype = "html"
-    msg.send()
+    send_mail(subject, from_email, recipients, message_html)
     
     return redirect(redirect_to)

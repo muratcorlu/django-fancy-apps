@@ -3,17 +3,18 @@ from datetime import datetime
 #from tinymce.widgets import TinyMCE
 from django.utils.translation import ugettext_lazy as _
 #from tinymce import models as tinymce_models
-from fancy.utils.thumbs import ImageWithThumbsField
 from fancy.utils.models import BaseModel
 from django.template.defaultfilters import slugify
 from mptt.models import MPTTModel
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User
+from fancy.utils.models import get_sentinel_user
+from fancy.utils.models import MetadataModel
 
-class Post(models.Model,BaseModel):
+class Post(MetadataModel,BaseModel):
     title = models.CharField(_('Title'),max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200)
-    author = models.ForeignKey(User, on_delete=models.SET())
+    author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
     content = models.TextField(_('Post Content'),blank=True)
     date = models.DateTimeField(_('Publish Date'), default=datetime.now())
     enable_comments = models.BooleanField(default=True)
@@ -53,17 +54,6 @@ class Post(models.Model,BaseModel):
     def get_next(self):
         return self.get_next_by_date(status__exact=1)
         
-    def get_meta(self,key):
-        return self.meta_data.objects.get(key=key)
-    
-    def metadata(self):
-        if not self._metadata:
-            self._metadata = {}
-            for mt in self.meta_data.all():
-                self._metadata[mt.key] = mt.value
-        
-        return self._metadata
-
     def get_content(self):
         return self.content
         

@@ -4,6 +4,19 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+"""
+BaseModel with versionning support
+"""
+class BaseManager(models.Manager):
+    def get_query_set(self):
+        return super(BaseManager, self).get_query_set().exclude(deleted_flag=True)
+
+    def all_with_deleted(self):
+        return super(BaseManager, self).get_query_set()
+
 def get_sentinel_user():
     return User.objects.get_or_create(username='deleted')[0]
 
@@ -12,11 +25,40 @@ class BaseModel(models.Model):
     created_date = models.DateTimeField(_('Added date'), auto_now_add=True)
     last_updated_by = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), editable=False, related_name="%(app_label)s_%(class)s_updated")
     last_updated_date = models.DateTimeField(_('Last update date'), auto_now=True)
+    related_id = models.IntegerField(default=0,editable=False)
+    deleted_flag = models.BooleanField(_('Deleted'),default=False, editable=False)
+
+    objects = BaseManager()
+
+    def delete(self,permanent=False):
+        if permanent:
+            super(BaseModel,self).delete(self)
+        else:
+            self.deleted_flag = True
+            self.save()
 
     class Meta:
         abstract = True
         get_latest_by = "created_date"
         ordering = ("-created_date",)
+        """
+        FIXME: Permission must be model specific. Now it's App specific
+        https://code.djangoproject.com/ticket/10686
+        """
+        permissions = (("can_view_deleted", _("Can view deleted rows")),)
+
+@receiver(pre_save)
+def version(sender, instance, **kwargs):
+    # check if model is an instance of BaseModel abstract model
+    if isinstance(instance, BaseModel):
+        # if the instance has no id, it is created
+        if instance.id:
+            old = instance._default_manager.get(id=instance.id)
+            old.pk = None
+            old.id = None
+            old.related_id = instance.id
+            old.deleted_flag = True
+            old.save()
 
 class MetadataModel(models.Model):
     _metadata = None
@@ -29,6 +71,10 @@ class MetadataModel(models.Model):
         
         return self._metadata
 
+    def get_meta(self,key):
+        metadata_type = ContentType.objects.get_for_model(self)
+        return Attribute.objects.filter(content_type__pk=metadata_type.id, object_id=self.id, key=key)
+    
     class Meta:
         abstract = True
 

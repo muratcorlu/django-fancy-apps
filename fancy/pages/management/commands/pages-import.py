@@ -2,8 +2,9 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from fancy.pages.models import Page
-from fancy.utils.models_attribute import Attribute
+from fancy.utils.models import Attribute
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
 
 import elementtree.ElementTree as ET
 from datetime import datetime
@@ -87,7 +88,11 @@ class Command(BaseCommand):
         
         for post in xml.findall("channel/item"):
             if post.find("%spost_type" % wpns).text == 'page':
-                newPost = Page()
+                author_name = post.find("{http://purl.org/dc/elements/1.1/}creator").text
+                author, created = User.objects.get_or_create(username=author_name)
+
+                newPost = Page(created_by=author, last_updated_by=author)
+
                 title = post.find("title").text
                 
                 newPost.title = 'Untitled page'
