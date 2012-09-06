@@ -29,3 +29,12 @@ def detail(request, product_slug=None, product_id=None, category_slug=None):
         raise Http404
 
     return direct_to_template(request, 'fancy/products/detail.html', {'product':product})
+
+def main_controller(request, slug):
+    parts = request.path_info.strip("/").split("/")
+    
+    # Check products
+    if Product.objects.filter(slug=parts[-1]).exists():
+        return detail(request, parts[-1])
+
+    return category_main(request, parts[-1])

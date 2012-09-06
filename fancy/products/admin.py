@@ -4,11 +4,15 @@ from models import Category, Product
 #from fancy.gallery.models import Image
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from mptt.admin import MPTTModelAdmin
 from fancy.utils.admin import MetaInline, BaseAdmin
 from fancy.gallery.admin import ImageInline
 from django.contrib.contenttypes import generic
+from admin_forms import CategoryForm
 
-class ProductAdmin(BaseAdmin):
+class ProductAdmin(MPTTModelAdmin,BaseAdmin):
+    form = CategoryForm
+
     list_display  = ['name','price','status']
     search_fields = ['name']
     prepopulated_fields = {"slug": ("name",)}
