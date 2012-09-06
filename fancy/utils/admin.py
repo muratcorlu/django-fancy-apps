@@ -8,6 +8,7 @@ class MetaInline(generic.GenericTabularInline):
     extra = 0
 
 class BaseAdmin(admin.ModelAdmin):
+    """
     def get_readonly_fields(self, request, obj=None):
         fs = super(BaseAdmin, self).get_readonly_fields(request, obj)
         fs += ('created_by', 'last_updated_by',)
@@ -22,7 +23,6 @@ class BaseAdmin(admin.ModelAdmin):
         fs.extend([(_('Other informations'), {'fields':['created_by','last_updated_by'], 'classes':['collapse']})])
         return fs
 
-    """
     def changelist_view(self, request, extra_context=None):
         if request.user.has_perm('%s.can_view_deleted' % self.model._meta.app_label):
             if not "deleted_flag" in self.list_filter:

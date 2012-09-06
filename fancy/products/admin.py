@@ -8,9 +8,11 @@ from mptt.admin import MPTTModelAdmin
 from fancy.utils.admin import MetaInline, BaseAdmin
 from fancy.gallery.admin import ImageInline
 from django.contrib.contenttypes import generic
-from admin_forms import CategoryForm
+from admin_forms import CategoryForm, ProductForm
 
 class ProductAdmin(BaseAdmin):
+    form = ProductForm
+    
     list_display  = ['name','price','status']
     search_fields = ['name']
     prepopulated_fields = {"slug": ("name",)}
