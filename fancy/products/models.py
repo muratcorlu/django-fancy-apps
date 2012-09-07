@@ -7,7 +7,7 @@ from datetime import datetime
 from fancy.utils.models import MetadataModel, BaseModel
 from django.contrib.contenttypes import generic
 
-class Category(MPTTModel,BaseModel,ModelWithImage):
+class Category(MPTTModel,ModelWithImage,BaseModel):
     name = models.CharField(_('Category name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     description = models.TextField(_('Description'), blank=True)
@@ -31,7 +31,7 @@ class Category(MPTTModel,BaseModel,ModelWithImage):
         return ('main_controller', (), {'slug' : str(self._slug) } )
 
 
-class Product(MetadataModel,BaseModel,ModelWithImage):
+class Product(MetadataModel,ModelWithImage,BaseModel):
     name = models.CharField(_('Product name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     price = models.DecimalField(_('Price'),max_digits=6,decimal_places=2,default=0)

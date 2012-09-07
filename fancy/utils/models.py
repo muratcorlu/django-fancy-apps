@@ -47,18 +47,21 @@ class BaseModel(models.Model):
         """
         permissions = (("can_view_deleted", _("Can view deleted rows")),)
 
+"""
 @receiver(pre_save)
 def version(sender, instance, **kwargs):
     # check if model is an instance of BaseModel abstract model
     if isinstance(instance, BaseModel):
         # if the instance has no id, it is created
-        if instance.id:
-            old = instance.__class__.objects.get(id=instance.id)
+        current_id = instance.id
+        if current_id:
+            old = instance
             old.pk = None
             old.id = None
-            old.related_id = instance.id
+            old.related_id = current_id
             old.deleted_flag = True
             old.save()
+"""
 
 class MetadataModel(models.Model):
     _metadata = None
