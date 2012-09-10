@@ -21,7 +21,10 @@ def detail(request, product_slug=None, product_id=None, category_slug=None):
     if product_id:
         product = get_object_or_404(Product, pk=product_id)
     elif product_slug:
-        product = get_object_or_404(Product, slug=product_slug)
+        if category_slug:
+            product = get_object_or_404(Product, slug=product_slug, category__slug=category_slug)
+        else:
+            product = get_object_or_404(Product, slug=product_slug)
     else:
         raise Http404
 
@@ -33,8 +36,9 @@ def detail(request, product_slug=None, product_id=None, category_slug=None):
 def main_controller(request, slug):
     parts = request.path_info.strip("/").split("/")
     
+    print parts, parts[-1]
     # Check products
-    if Product.objects.filter(slug=parts[-1]).exists():
-        return detail(request, parts[-1])
+    if Product.objects.filter(slug=parts[-1], category__slug=parts[-2]).exists():
+        return detail(request, product_slug=parts[-1], category_slug=parts[-2])
 
     return category_main(request, parts[-1])

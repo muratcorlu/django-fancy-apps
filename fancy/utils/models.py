@@ -8,15 +8,21 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 """
-BaseModel with versionning support
-"""
+from mptt.managers import TreeManager
+from mptt.models import MPTTModel
+
+TODO: BaseModel with versionning support
 class BaseManager(models.Manager):
     def get_query_set(self):
-        return super(BaseManager, self).get_query_set().exclude(deleted_flag=True)
+        return super(BaseManager, self).get_query_set().filter(deleted_flag=False)
 
     def all_with_deleted(self):
-        return super(BaseManager, self).get_query_set()
+        return super(BaseManager, self).get_query_set(related_id=0)
 
+class MPTTBaseManager(BaseManager, TreeManager):
+    pass
+
+"""
 def get_sentinel_user():
     return User.objects.get_or_create(username='deleted')[0]
 
@@ -25,10 +31,18 @@ class BaseModel(models.Model):
     created_date = models.DateTimeField(_('Added date'), auto_now_add=True)
     last_updated_by = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), editable=False, related_name="%(app_label)s_%(class)s_updated")
     last_updated_date = models.DateTimeField(_('Last update date'), auto_now=True)
+    """
     related_id = models.IntegerField(default=0,editable=False)
     deleted_flag = models.BooleanField(_('Deleted'),default=False, editable=False)
 
     objects = BaseManager()
+    
+    def versions(self):
+        #Returns old versions of current record
+        return self.__class__.objects.filter(related_id=self.id, deleted_flag=False)
+
+    def is_deleted(self):
+        return self.deleted_flag
 
     def delete(self,permanent=False):
         if permanent:
@@ -36,6 +50,7 @@ class BaseModel(models.Model):
         else:
             self.deleted_flag = True
             self.save()
+    """
 
     class Meta:
         abstract = True
@@ -61,6 +76,12 @@ def version(sender, instance, **kwargs):
             old.related_id = current_id
             old.deleted_flag = True
             old.save()
+
+class MPTTBaseModel(BaseModel, MPTTModel):
+    _default_manager = MPTTBaseManager()
+
+    class Meta:
+        abstract = True
 """
 
 class MetadataModel(models.Model):

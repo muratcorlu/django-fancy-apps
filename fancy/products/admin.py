@@ -13,9 +13,10 @@ from admin_forms import CategoryForm, ProductForm
 class ProductAdmin(BaseAdmin):
     form = ProductForm
     
-    list_display  = ['name','price','status']
+    list_display  = ['name','category','price','status']
     search_fields = ['name']
     prepopulated_fields = {"slug": ("name",)}
+    list_filter = ['category','status']
 
     fieldsets = (
         (None, {

@@ -28,9 +28,9 @@ class BaseAdmin(admin.ModelAdmin):
             if not "deleted_flag" in self.list_filter:
                 self.list_filter += ("deleted_flag",)
         return super(BaseAdmin, self).changelist_view(request, extra_context)
-    """
     def queryset(self, request):
         return super(BaseAdmin, self).queryset(request).exclude(deleted_flag=True)
+    """
     
     def save_model(self, request, obj, form, change):
         if not change:

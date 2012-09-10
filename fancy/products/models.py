@@ -7,7 +7,7 @@ from datetime import datetime
 from fancy.utils.models import MetadataModel, BaseModel
 from django.contrib.contenttypes import generic
 
-class Category(MPTTModel,ModelWithImage,BaseModel):
+class Category(MPTTModel, BaseModel, ModelWithImage):
     name = models.CharField(_('Category name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     description = models.TextField(_('Description'), blank=True)
@@ -24,14 +24,16 @@ class Category(MPTTModel,ModelWithImage,BaseModel):
     @models.permalink
     def get_absolute_url(self):
         if not getattr(self, '_slug', None):
-            url = self.slug
-            for ancestor in self.get_ancestors(True):
-                url = ancestor.slug + u'/' + url
+            slugs = [ancestor.slug for ancestor in self.get_ancestors()]
+            slugs.append(self.slug)
+            
+            url = '/'.join(slugs)
+
             self._slug = url    
         return ('products_full_tree', (), {'slug' : str(self._slug) } )
 
 
-class Product(MetadataModel,ModelWithImage,BaseModel):
+class Product(MetadataModel, ModelWithImage, BaseModel):
     name = models.CharField(_('Product name'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     price = models.DecimalField(_('Price'),max_digits=6,decimal_places=2,default=0)
@@ -54,7 +56,6 @@ class Product(MetadataModel,ModelWithImage,BaseModel):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.last_modified = datetime.now()
         if self.slug == '':
             self.slug = slugify(self.name)
 
@@ -68,4 +69,12 @@ class Product(MetadataModel,ModelWithImage,BaseModel):
 
     @models.permalink
     def get_absolute_url(self):
-        return self.category.get_absolute_url() + self.slug
+        if not getattr(self, '_slug', None):
+            slugs = [ancestor.slug for ancestor in self.category.get_ancestors()]
+            slugs.append(self.category.slug)
+            slugs.append(self.slug)
+            
+            url = '/'.join(slugs)
+
+            self._slug = url    
+        return ('products_full_tree', (), {'slug' : str(self._slug) } )
