@@ -1,15 +1,11 @@
 from django.db import models
 from datetime import datetime
-#from tinymce.widgets import TinyMCE
 from django.utils.translation import ugettext_lazy as _
-#from tinymce import models as tinymce_models
-from fancy.utils.models import BaseModel
-from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
+from fancy.utils.models import BaseModel, MetadataModel, get_sentinel_user
+from fancy.utils import slugify
 from mptt.models import MPTTModel
 from taggit.managers import TaggableManager
-from django.contrib.auth.models import User
-from fancy.utils.models import get_sentinel_user
-from fancy.utils.models import MetadataModel
 
 class Post(MetadataModel,BaseModel):
     title = models.CharField(_('Title'),max_length=200)
@@ -35,6 +31,12 @@ class Post(MetadataModel,BaseModel):
         verbose_name = _('Post')
         verbose_name_plural = _('Posts')
     
+    def save(self, *args, **kwargs):
+        if self.slug == '':
+            self.slug = slugify(self.title)
+
+        super(Post, self).save(*args, **kwargs) # Call the "real" save() method.
+
     def __unicode__(self):
         return self.title
         

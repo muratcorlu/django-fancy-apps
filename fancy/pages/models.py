@@ -39,7 +39,7 @@ class Page(MPTTModel,BaseModel,MetadataModel):
             self.slug = slugify(self.title)
 
         super(Page, self).save(*args, **kwargs) # Call the "real" save() method.
-    
+
     def get_active_child_menus(self):
         return self.children.defer('content').filter(status=1,show_in_menu=True)
     
