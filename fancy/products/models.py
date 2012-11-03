@@ -46,11 +46,12 @@ class Product(MetadataModel, ModelWithImage, BaseModel):
         ('1', _('In stock')),
     )
     status = models.CharField(_('Status'), max_length=1, choices=STATUSES, default='1')
-    
+    order_number = models.IntegerField(_('Order Number'),help_text=_('Ordering'),default=0)
+
     class Meta(BaseModel.Meta):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
-        ordering = ('name',)
+        ordering = ('order_number','-id')
 
     def __unicode__(self):
         return self.name
