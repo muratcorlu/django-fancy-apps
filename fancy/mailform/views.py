@@ -15,7 +15,7 @@ def send_mail(subject, from_email, recipients, message_html):
     else:
         from django.core.mail import EmailMultiAlternatives
 
-        msg = EmailMultiAlternatives(subject, "message_plaintext", from_email, recipients)
+        msg = EmailMultiAlternatives(subject, strip_tags(message_html), from_email, recipients)
         msg.attach_alternative(message_html, "text/html")
         msg.content_subtype = "html"
         msg.send()
