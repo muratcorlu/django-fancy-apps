@@ -34,7 +34,7 @@ class Post(MetadataModel,BaseModel):
     def save(self, *args, **kwargs):
         slug = self.slug
         if slug == '':
-            self.slug = slug = slugify(self.name)
+            self.slug = slug = slugify(self.title)
 
         i = 0
         while True:
