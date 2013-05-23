@@ -1,13 +1,13 @@
 from django.contrib.sitemaps import Sitemap
-from models import Page
+from models import Post
 
 
-class PageSitemap(Sitemap):
-    changefreq = "weekly"
+class BlogSitemap(Sitemap):
+    changefreq = "daily"
     priority = 0.5
 
     def items(self):
-        return Page.objects.filter(status=1)
+        return Post.objects.filter(status=1)
 
     def lastmod(self, obj):
         return obj.last_updated_date

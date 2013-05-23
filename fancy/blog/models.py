@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError, transaction
 from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
