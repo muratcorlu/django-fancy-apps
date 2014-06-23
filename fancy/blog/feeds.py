@@ -16,3 +16,6 @@ class LatestEntriesFeed(Feed):
 
     def item_description(self, item):
         return markdown.markdown(item.content)
+
+    def item_pubdate(self, item):
+        return item.date
