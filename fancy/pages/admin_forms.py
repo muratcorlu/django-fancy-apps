@@ -7,7 +7,7 @@ from models import Page
 
 class PageForm(forms.ModelForm):
 
-    parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
+    parent = TreeNodeChoiceField(queryset=Page.objects.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
 
     class Meta:
         model = Page

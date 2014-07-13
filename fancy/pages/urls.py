@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 from sitemap import PageSitemap
 from django.contrib.sitemaps.views import sitemap
 sitemaps = {

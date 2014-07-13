@@ -1,5 +1,4 @@
-from django.conf.urls.defaults import *
-
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('fancy.gallery.views',
     url(r'^(?P<slug>[-\w\/]+)/$',
