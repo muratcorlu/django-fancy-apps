@@ -26,10 +26,10 @@ class Image(BaseModel):
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     description = models.TextField(_('Description'), blank=True)
     order_number = models.IntegerField(_('Order number'), default=0)
-    is_cover = models.BooleanField(_('Cover photo'))
+    is_cover = models.BooleanField(_('Cover photo'), default=False)
 
     #tags = TaggableManager(blank=True)
-        
+
     class Meta(BaseModel.Meta):
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
@@ -44,10 +44,10 @@ class Image(BaseModel):
 
             image.thumbnail((int(width), int(height)), PILImage.ANTIALIAS)
             image.save(filename)
-        
+
         if not self.slug:
             self.slug = slugify(self.name)
-        
+
         super(Image, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -76,7 +76,7 @@ class ModelWithImage(models.Model):
             cover_item = self.images.get(is_cover=True)
         except:
             cover_item = self.images.latest()
-        
+
         return cover_item
 
     class Meta:
@@ -88,14 +88,14 @@ class Album(BaseModel, ModelWithImage):
     description = models.TextField(_('Description'), blank=True)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     status = models.SmallIntegerField(_('Status'),choices=ALBUM_STATUSES)
-    
+
     class Meta(BaseModel.Meta):
         verbose_name = _('Album')
         verbose_name_plural = _('Albums')
 
     def __unicode__(self):
         return self.name
-    
+
     @models.permalink
     def get_absolute_url(self):
      return ('album_detail', (), {'slug' : self.slug })
