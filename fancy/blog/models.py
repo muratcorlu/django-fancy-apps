@@ -6,16 +6,17 @@ from fancy.utils.models import BaseModel, MetadataModel, get_sentinel_user
 from fancy.utils import slugify
 from mptt.models import MPTTModel
 from taggit.managers import TaggableManager
+from django.conf import settings
 
 class Post(MetadataModel,BaseModel):
     title = models.CharField(_('Title'),max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
-    content = models.TextField(_('Post Content'),blank=True)
+    content = models.TextField(_('Post Content'), blank=True)
     date = models.DateTimeField(_('Publish Date'), default=datetime.now())
     enable_comments = models.BooleanField(default=True)
     categories = models.ManyToManyField('Category')
-    redirect_to = models.CharField(_('Redirect to'),help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
+    redirect_to = models.CharField(_('Redirect to'), help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
 
     PUB_STATUS = (
         (0, _('Draft')),
@@ -70,6 +71,10 @@ class Post(MetadataModel,BaseModel):
         return self.get_next_by_date(status__exact=1)
 
     def get_content(self):
+        if settings.BLOG_CONTENT_MARKDOWN:
+            from fancy.utils import Markdown
+            return Markdown.convert(self.content)
+
         return self.content
 
 class Category(MPTTModel,BaseModel):

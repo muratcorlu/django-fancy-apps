@@ -12,3 +12,8 @@ def delete_image_files(sender, instance, **kwargs):
     if sender == TaggedItem:
         instance.tag.slug = slugify(instance.tag.name)
         instance.tag.save()
+
+import markdown
+_extensions = ['markdown.extensions.nl2br']
+
+Markdown = markdown.Markdown(output_format='html5', extensions=_extensions)

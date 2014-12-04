@@ -6,3 +6,5 @@ FEED_DESCRIPTION = getattr(settings, 'FEED_DESCRIPTION', 'Site Description')
 
 BLOG_CATEGORY_PATH = getattr(settings, 'BLOG_CATEGORY_PATH', 'category')
 BLOG_TAG_PATH = getattr(settings, 'BLOG_TAG_PATH', 'tag')
+
+BLOG_CONTENT_MARKDOWN = getattr(settings, 'BLOG_CONTENT_MARKDOWN', True)
