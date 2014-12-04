@@ -6,8 +6,12 @@ from taggit.models import Tag
 
 def index(request):
 	category_list = Category.objects.all()
+	latest_posts = Post.objects.all()[:10]
 
-	return render(request, 'fancy/blog/index.html', { 'category_list' : category_list })
+	return render(request, 'fancy/blog/index.html', {
+		'category_list': category_list,
+		'latest_posts': latest_posts
+	})
 
 def detail(request,slug):
 	post = get_object_or_404(Post,slug=slug)
@@ -15,7 +19,7 @@ def detail(request,slug):
 	if post.redirect_to:
 	    return redirect(post.redirect_to)
 
-	return render(request, 'fancy/blog/detail.html',{'post':post})
+	return render(request, 'fancy/blog/detail.html', {'post':post})
 
 def show_post_list(request,post_list,title="",archieve_type="category"):
 	paginator = Paginator(post_list, 50)
