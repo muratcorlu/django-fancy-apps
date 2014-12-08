@@ -22,18 +22,18 @@ def send_mail(subject, from_email, recipients, message_html):
 
 def get_mail_content(request):
     tpl = request.POST.get('_tpl', 'default')
-    fields = dict((k, v) for k, v in request.POST.items() if k[0] != '_')
-    
+    fields = dict((k, v) for k, v in request.POST.items() if k[0] != '_' and k != 'csrfmiddlewaretoken')
+
     return render_to_string("fancy/mailform/mail/%s.html" % tpl, {'fields':fields})
 
 def post_form(request):
     message_html = get_mail_content(request)
-    
+
     from_email = appsettings.FORM_FROM
     recipients = appsettings.FORM_RECIPIENTS
     redirect_to = request.POST.get('_success_url')
     subject = request.POST.get('_subject', appsettings.FORM_SUBJECT)
-    
+
     send_mail(subject, from_email, recipients, message_html)
-    
+
     return redirect(redirect_to)

@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 """
-Usage: 
+Usage:
 
 {% load mailform %} <!-- Loads mailform templatetag library -->
 
@@ -12,11 +12,10 @@ Usage:
 
 {% show_mailform "contact_form.html" %} <!-- Shows contact_form.html form -->
 
-TODO: csrf protection should work
 """
-@register.simple_tag()
-def show_mailform(template="default.html"):
-    return render_to_string("fancy/mailform/%s" % template, {} )
+@register.simple_tag(takes_context=True)
+def show_mailform(context, template="default.html"):
+    return render_to_string("fancy/mailform/%s" % template, {}, context_instance=context )
 
 """
 Usage:
@@ -31,7 +30,7 @@ def render_mailform(value):
         from BeautifulSoup import BeautifulSoup
     except ImportError:
         from beautifulsoup import BeautifulSoup
-    
+
     content = BeautifulSoup(value, selfClosingTags=['mailform','img','br','input','meta','link','hr'])
 
     for inline in content.findAll('mailform'):
@@ -39,7 +38,7 @@ def render_mailform(value):
             tpl = inline["template"]
         except:
             tpl = "default.html"
-        
+
         inline.replaceWith(show_mailform(tpl))
 
     return mark_safe(content)
