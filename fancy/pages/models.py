@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from fancy.utils import slugify
 from fancy.utils.models import MetadataModel, BaseModel
 from mptt.models import MPTTModel
+from django.core.urlresolvers import reverse
 
 class Page(MPTTModel,BaseModel,MetadataModel):
     language = models.CharField(_('Language'), max_length=5, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
@@ -48,16 +49,15 @@ class Page(MPTTModel,BaseModel,MetadataModel):
 
     def render(self):
         if pages_settings.PAGE_DEFAULT_CONTENT_TYPE == 'md':
-            from markdown2 import markdown
-            return markdown(self.content,'nl2br,markdown-urlize')
+            from fancy.utils import Markdown
+            return Markdown.convert(self.content)
 
         return self.content
 
-    @models.permalink
     def get_absolute_url(self):
         if not getattr(self, '_slug', None):
             url = self.slug
             for ancestor in self.get_ancestors(True):
                 url = ancestor.slug + u'/' + url
             self._slug = url
-        return ('pages_page_detail', (), {'slug' : str(self._slug) } )
+        return reverse('pages_page_detail', kwargs={'slug': str(self._slug)})

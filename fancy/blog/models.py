@@ -6,7 +6,8 @@ from fancy.utils.models import BaseModel, MetadataModel, get_sentinel_user
 from fancy.utils import slugify
 from mptt.models import MPTTModel
 from taggit.managers import TaggableManager
-from django.conf import settings
+import settings
+from django.core.urlresolvers import reverse
 
 class Post(MetadataModel,BaseModel):
     title = models.CharField(_('Title'),max_length=200)
@@ -54,9 +55,8 @@ class Post(MetadataModel,BaseModel):
     def __unicode__(self):
         return self.title
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('post_detail', (), {'slug' : self.slug } )
+        return reverse('post_detail', kwargs={'slug': self.slug})
 
     def get_link(self):
         if self.redirect_to:
@@ -91,9 +91,8 @@ class Category(MPTTModel,BaseModel):
     def __unicode__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('category_index', (), {'slug' : self.slug } )
+        return reverse('category_index', kwargs={'slug' : self.slug } )
 
     def get_last_post(self):
         return Post.objects.filter(categories=self,status=1)[0]

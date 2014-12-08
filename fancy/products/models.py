@@ -6,6 +6,7 @@ from fancy.gallery.models import Image, ModelWithImage
 from datetime import datetime
 from fancy.utils.models import MetadataModel, BaseModel
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 
 class Category(MPTTModel, BaseModel, ModelWithImage):
     name = models.CharField(_('Category name'), max_length=200)
@@ -21,16 +22,15 @@ class Category(MPTTModel, BaseModel, ModelWithImage):
     def __unicode__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
         if not getattr(self, '_slug', None):
             slugs = [ancestor.slug for ancestor in self.get_ancestors()]
             slugs.append(self.slug)
-            
+
             url = '/'.join(slugs)
 
-            self._slug = url    
-        return ('products_full_tree', (), {'slug' : str(self._slug) } )
+            self._slug = url
+        return reverse('products_full_tree', kwargs={'slug' : str(self._slug) } )
 
 
 class Product(MetadataModel, ModelWithImage, BaseModel):
@@ -38,7 +38,7 @@ class Product(MetadataModel, ModelWithImage, BaseModel):
     slug = models.SlugField(_('Slug'), max_length=200, blank=True)
     price = models.DecimalField(_('Price'),max_digits=6,decimal_places=2,default=0)
     description = models.TextField(_('Description'))
-    
+
     category = models.ForeignKey(Category, verbose_name=_('Product category'), related_name="products")
 
     STATUSES = (
@@ -61,10 +61,10 @@ class Product(MetadataModel, ModelWithImage, BaseModel):
             self.slug = slugify(self.name)
 
         super(Product, self).save(*args, **kwargs) # Call the "real" save() method.
-    
+
     def can_order_multiple(self):
         return self.max_count > 1
-        
+
     def get_price_as_cent(self):
         return int(self.price * 100)
 
@@ -74,8 +74,8 @@ class Product(MetadataModel, ModelWithImage, BaseModel):
             slugs = [ancestor.slug for ancestor in self.category.get_ancestors()]
             slugs.append(self.category.slug)
             slugs.append(self.slug)
-            
+
             url = '/'.join(slugs)
 
-            self._slug = url    
+            self._slug = url
         return ('products_full_tree', (), {'slug' : str(self._slug) } )

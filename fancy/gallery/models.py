@@ -10,6 +10,7 @@ from helpers import get_upload_path
 from taggit.managers import TaggableManager
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 
 ALBUM_STATUSES = (
     (0, _('Private')),
@@ -53,9 +54,8 @@ class Image(BaseModel):
     def __unicode__(self):
         return self.image.url
 
-    @models.permalink
     def get_absolute_link(self):
-        return ('album_item_detail', (), {'album_slug':self.album.slug, 'album_item_slug' : self.slug } )
+        return reverse('album_item_detail', kwargs={'album_slug':self.album.slug, 'album_item_slug' : self.slug } )
 
 # If sorl-thumbnail app is installed, bind image delete signal to thumbnail deletions
 if 'sorl.thumbnail' in settings.INSTALLED_APPS:
@@ -96,6 +96,5 @@ class Album(BaseModel, ModelWithImage):
     def __unicode__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
-     return ('album_detail', (), {'slug' : self.slug })
+        return reverse('album_detail', kwargs={'slug' : self.slug })
