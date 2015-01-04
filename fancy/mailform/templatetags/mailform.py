@@ -25,7 +25,7 @@ page.content has mailform tag like that: <mailform template="contact_form.html" 
 {{ page.content|render_mailform }}
 """
 @register.filter
-def render_mailform(value):
+def render_mailform(value, context=None):
     try:
         from BeautifulSoup import BeautifulSoup
     except ImportError:
@@ -39,6 +39,11 @@ def render_mailform(value):
         except:
             tpl = "default.html"
 
-        inline.replaceWith(show_mailform(tpl))
+        if context:
+            rendered = render_to_string("fancy/mailform/%s" % tpl, {}, context_instance=context)
+        else:
+            rendered = render_to_string("fancy/mailform/%s" % tpl, {})
+
+        inline.replaceWith(BeautifulSoup(rendered))
 
     return mark_safe(content)

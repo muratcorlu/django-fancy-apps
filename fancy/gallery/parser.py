@@ -12,8 +12,9 @@ def inlines(value, return_list=False):
         from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup
     except ImportError:
         from beautifulsoup import BeautifulStoneSoup, BeautifulSoup
-    
+
     content = BeautifulSoup(value, selfClosingTags=['gallery','img','br','input','meta','link','hr'])
+
     inline_list = []
 
     if return_list:
@@ -24,10 +25,13 @@ def inlines(value, return_list=False):
     else:
         for inline in content.findAll('gallery'):
             rendered_inline = render_inline(inline)
+
             if rendered_inline:
-                inline.replaceWith(render_to_string(rendered_inline['template'], rendered_inline['context']))
+                inline.replaceWith(BeautifulSoup(render_to_string(rendered_inline['template'], rendered_inline['context'])))
             else:
                 inline.replaceWith('')
+
+        print content
         return mark_safe(content)
 
 
