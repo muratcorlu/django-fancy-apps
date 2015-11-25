@@ -9,21 +9,28 @@ from taggit.managers import TaggableManager
 import settings
 from django.core.urlresolvers import reverse
 
-class Post(MetadataModel,BaseModel):
-    title = models.CharField(_('Title'),max_length=200)
+
+class Post(MetadataModel, BaseModel):
+    title = models.CharField(_('Title'), max_length=200)
     slug = models.SlugField(_('Slug'), max_length=200, blank=True, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
     content = models.TextField(_('Post Content'), blank=True)
     date = models.DateTimeField(_('Publish Date'), default=datetime.now())
     enable_comments = models.BooleanField(default=True)
     categories = models.ManyToManyField('Category')
-    redirect_to = models.CharField(_('Redirect to'), help_text=_("Redirect this url to another url instead of showing"),blank=True,null=True,max_length=100)
+    redirect_to = models.CharField(_('Redirect to'),
+                                   help_text=_("Redirect this url to another url instead of showing"),
+                                   blank=True,
+                                   null=True,
+                                   max_length=100)
 
+    PUB_STATUS_DRAFT = 0
+    PUB_STATUS_PUBLISHED = 1
     PUB_STATUS = (
         (0, _('Draft')),
         (1, _('Published')),
     )
-    status = models.IntegerField(_('Status'),choices=PUB_STATUS, default=0)
+    status = models.IntegerField(_('Status'), choices=PUB_STATUS, default=PUB_STATUS_DRAFT)
 
     tags = TaggableManager(blank=True)
 
@@ -49,8 +56,8 @@ class Post(MetadataModel,BaseModel):
                 transaction.savepoint_rollback(savepoint)
                 i += 1
                 self.slug = '%s-%d' % (slug, i)
-
-        super(Post, self).save(*args, **kwargs) # Call the "real" save() method.
+        # Call the "real" save() method.
+        super(Post, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title
@@ -65,10 +72,10 @@ class Post(MetadataModel,BaseModel):
         return self.get_absolute_url()
 
     def get_previous(self):
-        return self.get_previous_by_date(status__exact=1)
+        return self.get_previous_by_date(status__exact=self.PUB_STATUS_PUBLISHED)
 
     def get_next(self):
-        return self.get_next_by_date(status__exact=1)
+        return self.get_next_by_date(status__exact=self.PUB_STATUS_PUBLISHED)
 
     def get_content(self):
         if settings.BLOG_CONTENT_MARKDOWN:
@@ -76,6 +83,7 @@ class Post(MetadataModel,BaseModel):
             return Markdown.convert(self.content)
 
         return self.content
+
 
 class Category(MPTTModel,BaseModel):
     name = models.CharField(_('Category Name'), max_length=50)
@@ -92,13 +100,13 @@ class Category(MPTTModel,BaseModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category_index', kwargs={'slug' : self.slug } )
+        return reverse('category_index', kwargs={'slug': self.slug})
 
     def get_last_post(self):
-        return Post.objects.filter(categories=self,status=1)[0]
+        return Post.objects.filter(categories=self, status=Post.PUB_STATUS_PUBLISHED)[0]
 
     def post_count(self):
-        return Post.objects.filter(categories=self,status=1).count()
+        return Post.objects.filter(categories=self, status=Post.PUB_STATUS_PUBLISHED).count()
 
     def last_post_date(self):
         return self.get_last_post().date
